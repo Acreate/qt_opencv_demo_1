@@ -21,6 +21,7 @@ endfunction()
 ### 若存在，则返回所在目录的路径
 ### 文件名不区分大小写
 function(get_current_path_dirs out_list check_path_dir file_name)
+	message("检测路径 : " ${check_path_dir})
 	set(for_each_list_dirs ${${out_list}})
 	string(TOUPPER ${file_name} file_name )
 	if(IS_DIRECTORY ${check_path_dir} )
@@ -32,6 +33,7 @@ function(get_current_path_dirs out_list check_path_dir file_name)
 				foreach(current_path_file ${child_dir_in_files})
 					string(TOUPPER ${current_path_file} current_path_file)
 					if(IS_DIRECTORY ${check_path_dir}/${current_path_file})
+					
 					elseif(current_path_file STREQUAL ${file_name})
 						list(APPEND for_each_list_dirs ${current_path} )
 					endif()
