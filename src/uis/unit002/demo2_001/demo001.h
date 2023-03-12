@@ -1,5 +1,7 @@
-﻿#ifndef NAMESPACEFUN_H_H_HEAD__FILE__
-#define NAMESPACEFUN_H_H_HEAD__FILE__
+﻿#ifndef DEMO001_H_H_HEAD__FILE__
+#define DEMO001_H_H_HEAD__FILE__
+#pragma once
+
 #pragma once
 #include <random>
 #include <opencv2/opencv.hpp>

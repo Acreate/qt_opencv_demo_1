@@ -1,4 +1,4 @@
-﻿#include "namespaceFun.h"
+﻿#include "demo001.h"
 void unit002::demo002_001::salt( cv::Mat image, int n ) {
 	std::default_random_engine generator;
 	std::uniform_int_distribution<int> randomRwo(0, image.rows - 1);
