@@ -14,9 +14,6 @@ message( "============ ${CURRENT_FOLDER}" )
 
 file(GLOB allCopyFiles "${CMAKE_CURRENT_SOURCE_DIR}/*")
 file(COPY ${allCopyFiles} DESTINATION "${EXECUTABLE_OUTPUT_PATH}/")
-foreach(outFile ${allCopyFiles})
-	message("发现 \t: "${outFile} "\t<<<<<=====\n")
-endforeach()
 
 # execute_process(
 # 	COMMAND cp ${allCopyFiles} "${EXECUTABLE_OUTPUT_PATH}/"
