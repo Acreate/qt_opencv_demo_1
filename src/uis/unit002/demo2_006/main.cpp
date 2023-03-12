@@ -10,20 +10,21 @@
 int main( int argc, char *argv[] ) {
 	QGuiApplication a(argc, argv);
 	auto image = cvFunction::readImage("boldt.jpg", 1);
-	// 调用函数以添加噪声
-	cv::Mat outImage1 = image.clone();
-	unit002::demo002_006::salt(outImage1, 3000);
-	cv::Mat outImage2;
-	unit002::demo002_006::colorReduce(image, outImage2);
-	cv::Mat outImage3;
-	unit002::demo002_006::sharpen(image, outImage3);
-	cv::Mat outImage4;
-	unit002::demo002_006::sharpen2D(image, outImage4);
-	cvFunction::showMatImg(image, "image");
-	cvFunction::showMatImg(outImage1, "outImage1");
-	cvFunction::showMatImg(outImage2, "outImage2");
-	cvFunction::showMatImg(outImage3, "outImage3");
-	cvFunction::showMatImg(outImage4, "outImage4");
-
+	auto imageMerge = cvFunction::readImage("rain.jpg", 1);
+	cvFunction::showMatImg(image);
+	cvFunction::showMatImg(imageMerge);
+	// 和运算
+	cv::Mat destImage;
+	cv::add(image, imageMerge, destImage);
+	cvFunction::showMatImg(destImage);
+	cv::addWeighted(image, 0.7, imageMerge, 0.9, 0., destImage);
+	cvFunction::showMatImg(destImage);
+	// 分割通道
+	std::vector<cv::Mat> planes;
+	cv::split(image, planes);
+	planes[0] += cv::Scalar(-255, 255, 255);
+	// 合并通道
+	cv::merge(planes, destImage);
+	cvFunction::showMatImg(destImage);
 	return a.exec();
 }
