@@ -1,0 +1,42 @@
+
+#ifndef CONTENTFINDER_EXPORT_H
+#define CONTENTFINDER_EXPORT_H
+
+#ifdef CONTENTFINDER_STATIC_DEFINE
+#  define CONTENTFINDER_EXPORT
+#  define CONTENTFINDER_NO_EXPORT
+#else
+#  ifndef CONTENTFINDER_EXPORT
+#    ifdef contentFinder_EXPORTS
+        /* We are building this library */
+#      define CONTENTFINDER_EXPORT __declspec(dllexport)
+#    else
+        /* We are using this library */
+#      define CONTENTFINDER_EXPORT __declspec(dllimport)
+#    endif
+#  endif
+
+#  ifndef CONTENTFINDER_NO_EXPORT
+#    define CONTENTFINDER_NO_EXPORT 
+#  endif
+#endif
+
+#ifndef CONTENTFINDER_DEPRECATED
+#  define CONTENTFINDER_DEPRECATED __declspec(deprecated)
+#endif
+
+#ifndef CONTENTFINDER_DEPRECATED_EXPORT
+#  define CONTENTFINDER_DEPRECATED_EXPORT CONTENTFINDER_EXPORT CONTENTFINDER_DEPRECATED
+#endif
+
+#ifndef CONTENTFINDER_DEPRECATED_NO_EXPORT
+#  define CONTENTFINDER_DEPRECATED_NO_EXPORT CONTENTFINDER_NO_EXPORT CONTENTFINDER_DEPRECATED
+#endif
+
+#if 0 /* DEFINE_NO_DEPRECATED */
+#  ifndef CONTENTFINDER_NO_DEPRECATED
+#    define CONTENTFINDER_NO_DEPRECATED
+#  endif
+#endif
+
+#endif /* CONTENTFINDER_EXPORT_H */

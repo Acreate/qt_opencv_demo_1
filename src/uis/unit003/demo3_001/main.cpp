@@ -14,7 +14,6 @@ int main( int argc, char *argv[] ) {
 	QGuiApplication a(argc, argv);
 	ColorDetector cdetect;
 	auto image = cvFunction::readImage("boldt.jpg", 1);
-
 	cdetect.setTargetColor(230, 190, 130);
 	cv::Mat result = cdetect.process(image);
 	cvFunction::showMatImg(image);
@@ -27,7 +26,7 @@ int main( int argc, char *argv[] ) {
 		cv::Scalar(35, 35, 35),// 偏差的最小/最大阈值
 		cv::Scalar(35, 35, 35),// 正差阈值，两个阈值通常相等
 		cv::FLOODFILL_FIXED_RANGE);// 与起始点像素比较
-		
+
 	cvFunction::showMatImg(result);
 	return a.exec();
 }
