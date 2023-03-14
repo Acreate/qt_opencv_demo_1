@@ -51,22 +51,28 @@ public:
 		cv::normalize(h, shistogram, 1.0, cv::NORM_L2);
 	}
 
-	// Simplified version in which
-	// all channels used, with range [0,256[
+	// 使用全部通道，范围 [0,256]
 	cv::Mat find( const cv::Mat &image ) {
 
 		cv::Mat result;
-		hranges[0] = 0.0;// default range [0,256[
+		// 设置通道 [0,156)
+		hranges[0] = 0.0;
 		hranges[1] = 256.0;
-		channels[0] = 0;// the three channels 
+		// 3 通道
+		channels[0] = 0;
 		channels[1] = 1;
 		channels[2] = 2;
 
 		return find(image, hranges[0], hranges[1], channels);
 	}
 
-	// Finds the pixels belonging to the histogram
-	cv::Mat find( const cv::Mat &image, float minValue, float maxValue, int *channels ) {
+	/// @brief 查找属于直方图的像素
+	/// @param image 查找图像
+	/// @param minValue 最小值
+	/// @param maxValue 最大值
+	/// @param channels 通道数组（描述通道下标）
+	/// @return 查找到的图像
+	cv::Mat find( const cv::Mat &image, float minValue, float maxValue, const int *channels ) {
 
 		cv::Mat result;
 
@@ -74,36 +80,35 @@ public:
 		hranges[1] = maxValue;
 
 		if ( isSparse ) {
-			// call the right function based on histogram type
+			// 使用稀疏矩阵
 
 			for ( int i = 0; i < shistogram.dims(); i++ )
 				this->channels[i] = channels[i];
 
 			cv::calcBackProject(&image,
-				1,// we only use one image at a time
-				channels,// vector specifying what histogram dimensions belong to what image channels
-				shistogram,// the histogram we are using
-				result,// the resulting back projection image
-				ranges,// the range of values, for each dimension
-				255.0// the scaling factor is chosen such that a histogram value of 1 maps to 255
+				1,// 只是单个图像
+				channels,// 通道描述数组
+				shistogram,// 直方图
+				result,// 方向投影的图像
+				ranges,// 维度范围描述数组
+				255.0// 把概念从 1 映射到 255
 				);
-
 		} else {
-
+			// 通道下标与维度数一致
 			for ( int i = 0; i < histogram.dims; i++ )
 				this->channels[i] = channels[i];
 
 			cv::calcBackProject(&image,
-				1,// we only use one image at a time
-				channels,// vector specifying what histogram dimensions belong to what image channels
-				histogram,// the histogram we are using
-				result,// the resulting back projection image
-				ranges,// the range of values, for each dimension
-				255.0// the scaling factor is chosen such that a histogram value of 1 maps to 255
+				1,// 只是单个图像
+				channels,// 通道描述数组
+				histogram,// 直方图
+				result,// 方向投影的图像
+				ranges,// 维度范围描述数组
+				255.0// 把概念从 1 映射到 255
 				);
 		}
 
-		// Threshold back projection to obtain a binary image
+		// 比要的时候，使用二值化
 		if ( threshold > 0.0 )
 			cv::threshold(result, result, 255.0 * threshold, 255.0, cv::THRESH_BINARY);
 

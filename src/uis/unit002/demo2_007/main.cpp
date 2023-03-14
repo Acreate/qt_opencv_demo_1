@@ -9,8 +9,9 @@
 
 int main( int argc, char *argv[] ) {
 	QGuiApplication a(argc, argv);
-	auto image = cvFunction::readImage("boldt.jpg", 1);
-	cv::Mat destImage;
+	cv::Mat image, destImage;
+	if ( !cvFunction::readImage("boldt.jpg", image, 1) )
+		return -1;
 	cvFunction::showMatImg(image);
 	unit002::demo002_007::wave(image, destImage);
 	cvFunction::showMatImg(destImage);

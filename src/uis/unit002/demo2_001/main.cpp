@@ -11,7 +11,10 @@
 
 int main( int argc, char *argv[] ) {
 	QGuiApplication a(argc, argv);
-	auto image = cvFunction::readImage("boldt.jpg", 1);
+	cv::Mat image;
+
+	if ( !cvFunction::readImage("boldt.jpg", image, 1) )
+		return -1;
 	// 调用函数以添加噪声
 	unit002::demo002_001::salt(image, 3000);
 	cvFunction::showMatImg(image);

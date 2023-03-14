@@ -11,7 +11,7 @@ SET( OpenCV_DIR "C:/libs/opencv/build/")
 
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS}) 
-include_directories(../cvFunction)
+
 
 # 当前目录下也有代码
 FILE(GLOB SRC_LIST "*.cpp" "*.c" "*.hpp" "*.h" )
@@ -30,7 +30,6 @@ PRIVATE
 	Qt${QT_VERSION_MAJOR}::Gui
 	Qt${QT_VERSION_MAJOR}::Core
 	${OpenCV_LIBS}
-	cvFunction
 )
 
 STRING( SUBSTRING "${PROJECT_NAME}" 0 1 exportFileStartName )

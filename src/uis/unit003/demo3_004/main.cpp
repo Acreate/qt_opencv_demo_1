@@ -14,12 +14,8 @@ int main( int argc, char *argv[] ) {
 	cvFunction::showMatImg(image);
 	ColorHistogram coh;
 	int channels = image.channels();
-	cv::Mat histogram = coh.getHistogram(image);
+	cv::Mat histogram = coh.getHueHistogram(image);
 	cvFunction::showMatImg(histogram);
-	histogram = coh.getNormalHistogram(image);
-	cv::Mat outResult;
-	histogram.convertTo(outResult, CV_8U, -1, 255);
-	bool showMatImg = cvFunction::showMatImg(outResult);
 
 	return a.exec();
 }

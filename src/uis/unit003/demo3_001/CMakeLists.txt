@@ -23,6 +23,7 @@ file( GLOB SRC_LIST
 	"*.ui" )
 include_directories( ../libs/converQimageOrCvMat )
 include_directories( ../libs/colordetector )
+include_directories( ../libs/cvFunction )
 
 if( ${QT_VERSION_MAJOR} GREATER_EQUAL 6 )
 	# qt_add_executable( ${PROJECT_NAME} MANUAL_FINALIZATION ${SRC_LIST} )
@@ -44,6 +45,7 @@ target_link_libraries(
 	${OpenCV_LIBS}
 	converQimageOrCvMat
 	colordetector
+	cvFunction
 )
 
 # 设置包内容

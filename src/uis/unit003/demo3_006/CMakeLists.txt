@@ -15,15 +15,18 @@ find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 # 当前目录下也有代码
-file(
-	GLOB
-	SRC_LIST
+file( GLOB SRC_LIST
 	"*.cpp"
 	"*.c"
 	"*.hpp"
 	"*.h"
 	"*.ui" )
 include_directories( ../libs/converQimageOrCvMat )
+include_directories( ../libs/colorHistogram )
+include_directories( ../libs/contentFinder )
+include_directories( ../libs/histogram )
+include_directories( ../libs/imageComparator )
+include_directories( ../libs/integral )
 include_directories( ../libs/cvFunction )
 
 if( ${QT_VERSION_MAJOR} GREATER_EQUAL 6 )
@@ -39,11 +42,19 @@ endif()
 
 target_link_libraries(
 	${PROJECT_NAME}
-	PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui
-	Qt${QT_VERSION_MAJOR}::Widgets ${OpenCV_LIBS} 
-	converQimageOrCvMat 
-	cvFunction 
-	)
+	PRIVATE
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+	${OpenCV_LIBS}
+	histogram
+	integral
+	imageComparator
+	colorHistogram
+	contentFinder
+	converQimageOrCvMat
+	cvFunction
+)
 
 # 设置包内容
 set_target_properties(
@@ -53,17 +64,16 @@ set_target_properties(
 	MACOSX_BUNDLE_SHORT_VERSION_STRING
 	${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
 	MACOSX_BUNDLE TRUE
-	WIN32_EXECUTABLE NOT )
+	WIN32_EXECUTABLE NOT
+)
 
 if( QT_VERSION_MAJOR EQUAL 6 )
 	qt_finalize_executable( ${PROJECT_NAME} )
 endif()
 
-add_custom_command(
-	TARGET ${PROJECT_NAME}
-	POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:opencv_world>
-	"$<TARGET_FILE_DIR:${PROJECT_NAME}>" )
+add_custom_command( TARGET ${PROJECT_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:opencv_world> "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+)
 
 if( APPLE )
 	set( executable_path "$<TARGET_FILE_NAME:${PROJECT_NAME}>.app" )
@@ -76,8 +86,7 @@ set( deploy_script "${CMAKE_CURRENT_BINARY_DIR}/deploy_${PROJECT_NAME}.cmake" )
 file(
 	GENERATE
 	OUTPUT ${deploy_script}
-	CONTENT
-	"
+	CONTENT "
 message(\"=================\")
 message(\"============	> 执行 : ${executable_path}\")
 message(\"=================\")

@@ -8,7 +8,9 @@
 
 int main( int argc, char *argv[] ) {
 	QGuiApplication a(argc, argv);
-	auto image = cvFunction::readImage("boldt.jpg", 1);
+	cv::Mat image;
+	if ( ! cvFunction::readImage("boldt.jpg", image, 1) )
+		return -1;
 	cvFunction::showMatImg(image);
 	cv::Rect rectangle(5, 70, 260, 120);
 	cv::Mat result;// 分割结果(四种可能的值)

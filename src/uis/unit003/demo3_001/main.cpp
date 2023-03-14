@@ -13,7 +13,9 @@
 int main( int argc, char *argv[] ) {
 	QGuiApplication a(argc, argv);
 	ColorDetector cdetect;
-	auto image = cvFunction::readImage("boldt.jpg", 1);
+	cv::Mat image;
+	if ( cvFunction::readImage("boldt.jpg", image, 1) )
+		return -1;
 	cdetect.setTargetColor(230, 190, 130);
 	cv::Mat result = cdetect.process(image);
 	cvFunction::showMatImg(image);

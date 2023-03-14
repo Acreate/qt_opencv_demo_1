@@ -9,8 +9,12 @@
 
 int main( int argc, char *argv[] ) {
 	QGuiApplication a(argc, argv);
-	auto image = cvFunction::readImage("boldt.jpg", 1);
-	auto imageMerge = cvFunction::readImage("rain.jpg", 1);
+	cv::Mat image, imageMerge;
+	if ( !cvFunction::readImage("boldt.jpg", image, 1) )
+		return -1;
+
+	if ( !cvFunction::readImage("rain.jpg", imageMerge, 1) )
+		return -1;
 	cvFunction::showMatImg(image);
 	cvFunction::showMatImg(imageMerge);
 	// 和运算

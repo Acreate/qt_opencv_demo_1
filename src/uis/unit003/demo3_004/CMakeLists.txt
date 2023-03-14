@@ -25,6 +25,7 @@ include_directories( ../libs/converQimageOrCvMat )
 include_directories( ../libs/histogram )
 include_directories( ../libs/contentFinder )
 include_directories( ../libs/colorHistogram )
+include_directories( ../libs/cvFunction )
 
 if( ${QT_VERSION_MAJOR} GREATER_EQUAL 6 )
 	# qt_add_executable( ${PROJECT_NAME} MANUAL_FINALIZATION ${SRC_LIST} )
@@ -46,6 +47,7 @@ target_link_libraries(
 	${OpenCV_LIBS}
 	converQimageOrCvMat
 	histogram
+	cvFunction
 	contentFinder
 	colorHistogram
 )
