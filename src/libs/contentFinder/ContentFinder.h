@@ -29,12 +29,14 @@ public:
 		ranges[2] = hranges;
 	}
 
-	// Sets the threshold on histogram values [0,1]
+	/// @brief 设置判断阈值
+	/// @param t 新的阈值
 	void setThreshold( float t ) {
 		threshold = t;
 	}
 
-	// Gets the threshold
+	/// @brief 获取阈值
+	/// @return 阈值
 	float getThreshold( ) {
 		return threshold;
 	}
@@ -73,18 +75,13 @@ public:
 	/// @param channels 通道数组（描述通道下标）
 	/// @return 查找到的图像
 	cv::Mat find( const cv::Mat &image, float minValue, float maxValue, const int *channels ) {
-
 		cv::Mat result;
-
 		hranges[0] = minValue;
 		hranges[1] = maxValue;
-
 		if ( isSparse ) {
 			// 使用稀疏矩阵
-
 			for ( int i = 0; i < shistogram.dims(); i++ )
 				this->channels[i] = channels[i];
-
 			cv::calcBackProject(&image,
 				1,// 只是单个图像
 				channels,// 通道描述数组
@@ -97,7 +94,6 @@ public:
 			// 通道下标与维度数一致
 			for ( int i = 0; i < histogram.dims; i++ )
 				this->channels[i] = channels[i];
-
 			cv::calcBackProject(&image,
 				1,// 只是单个图像
 				channels,// 通道描述数组
@@ -107,11 +103,9 @@ public:
 				255.0// 把概念从 1 映射到 255
 				);
 		}
-
 		// 比要的时候，使用二值化
 		if ( threshold > 0.0 )
 			cv::threshold(result, result, 255.0 * threshold, 255.0, cv::THRESH_BINARY);
-
 		return result;
 	}
 

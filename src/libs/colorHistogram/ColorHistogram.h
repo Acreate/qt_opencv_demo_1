@@ -10,7 +10,7 @@
 class COLORHISTOGRAM_EXPORT ColorHistogram {
 
 private:
-	int histSize[3];// 计算3个维度
+	int histSize[3];// 计算3个维度，每个维度统计的最大元素
 	float hranges[2];// 值范围
 	const float *ranges[3];// 每个维度的范围
 	int channels[3];// 处理的通道数
@@ -33,14 +33,13 @@ public:
 		channels[2] = 2;// R
 	}
 
-	// set histogram size for each dimension
+	// 返回统计像素最大数值
 	void setSize( int size ) {
-
 		// each dimension has equal size 
 		histSize[0] = histSize[1] = histSize[2] = size;
 	}
 
-	// Computes the histogram.
+	// 计算直方图
 	cv::Mat getHistogram( const cv::Mat &image ) {
 
 		cv::Mat hist;
@@ -100,46 +99,50 @@ public:
 		return hist;
 	}
 
-	// Computes the 1D Hue histogram.
-	// BGR source image is converted to HSV
-	// Pixels with low saturation are ignored
+	
+	/// @brief 忽略低饱和度的像素
+	/// @brief BGR 的原图转换为 HSV
+	/// @brief 计算以为色调直方图
+	/// @param image 计算图像
+	/// @param minSaturation 最小忽略数
+	/// @return 统计的值
 	cv::Mat getHueHistogram( const cv::Mat &image,
 		int minSaturation = 0 ) {
 
 		cv::Mat hist;
 
-		// Convert to HSV colour space
+		// 转换到 HSV 色彩空间
 		cv::Mat hsv;
 		cv::cvtColor(image, hsv, cv::COLOR_BGR2HSV);
 
-		// Mask to be used (or not)
+		// 掩码，也许用不到
 		cv::Mat mask;
-		// creating the mask if required
+		// 根据需要创建掩码
 		if ( minSaturation > 0 ) {
-
-			// Spliting the 3 channels into 3 images
+			// 将 3 个通道分割进 3 个图像
 			std::vector<cv::Mat> v;
 			cv::split(hsv, v);
-
-			// Mask out the low saturated pixels
+			// 屏蔽低饱和度的像素
 			cv::threshold(v[1], mask, minSaturation, 255,
 				cv::THRESH_BINARY);
 		}
 
-		// Prepare arguments for a 1D hue histogram
-		hranges[0] = 0.0;// range is from 0 to 180
+		// 需要一维色调直方图的参数
+		// [0,180)
+		hranges[0] = 0.0;
 		hranges[1] = 180.0;
-		channels[0] = 0;// the hue channel 
+		// 使用 hue 通道（色调通道）
+		channels[0] = 0;
 
-		// Compute histogram
+		// 计算直方图
 		cv::calcHist(&hsv,
-			1,// histogram of 1 image only
-			channels,// the channel used
-			mask,// binary mask
-			hist,// the resulting histogram
-			1,// it is a 1D histogram
-			histSize,// number of bins
-			ranges// pixel value range
+			1,// 只有一个图片
+			channels,// 用到的通道已经存储到数组当中
+			mask,// 也许需要掩码，如果参数 minSaturation 大于 0，则存储在 cv::threshold 函数运行过后的返回中
+			hist,// 返回的直方图
+			1,// 只是用一维
+			histSize,// 箱子数已经存在该数组当中
+			ranges// 范围已经存在该数组当中
 			);
 
 		return hist;
