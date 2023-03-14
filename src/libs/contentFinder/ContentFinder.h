@@ -13,7 +13,7 @@ private:
 	const float *ranges[3];
 	/// @brief 通道下标
 	int channels[3];
-	/// @brief 判断阈值
+	/// @brief 判断阈值(255 的百分比)
 	float threshold;
 	/// @brief 输入直方图
 	cv::Mat histogram;
@@ -29,14 +29,14 @@ public:
 		ranges[2] = hranges;
 	}
 
-	/// @brief 设置判断阈值
-	/// @param t 新的阈值
-	void setThreshold( float t ) {
-		threshold = t;
+	/// @brief 设置判断阈值(255 的百分比)
+	/// @param newThreshold 新的阈值(255 的百分比)
+	void setThreshold( float newThreshold ) {
+		threshold = newThreshold;
 	}
 
-	/// @brief 获取阈值
-	/// @return 阈值
+	/// @brief 获取阈值(255 的百分比)
+	/// @return 阈值(255 的百分比)
 	float getThreshold( ) {
 		return threshold;
 	}
@@ -53,9 +53,10 @@ public:
 		cv::normalize(h, shistogram, 1.0, cv::NORM_L2);
 	}
 
-	// 使用全部通道，范围 [0,256]
+	/// @brief 图片查找，使用使用全部通道，范围 [0,256]
+	/// @param image 查找的图片
+	/// @return 直方图数据
 	cv::Mat find( const cv::Mat &image ) {
-
 		cv::Mat result;
 		// 设置通道 [0,156)
 		hranges[0] = 0.0;

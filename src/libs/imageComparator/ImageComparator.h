@@ -10,39 +10,37 @@
 class IMAGECOMPARATOR_EXPORT ImageComparator {
 
 private:
-	cv::Mat refH;// reference histogram
-	cv::Mat inputH;// histogram of input image
-
+	/// @brief 基准直方图
+	cv::Mat refH;
+	/// @brief 输入图像的直方图
+	cv::Mat inputH;
+	/// @brief 直方图操作对象
 	ColorHistogram hist;
-	int nBins;// number of bins used in each color channel
+	/// @brief 每个颜色通道使用的箱子数量
+	int nBins;
 
 public:
 	ImageComparator( ) : nBins(8) { }
 
-	// Set number of bins used when comparing the histograms
+	// 设置箱子数量
 	void setNumberOfBins( int bins ) {
-
 		nBins = bins;
 	}
 
 	int getNumberOfBins( ) {
-
 		return nBins;
 	}
 
-	// set and compute histogram of reference image
+	// 设置并计算基准图像的直方图
 	void setReferenceImage( const cv::Mat &image ) {
-
 		hist.setSize(nBins);
 		refH = hist.getHistogram(image);
 	}
 
-	// compare the image using their BGR histograms
+	// 用 BGR 直方图比较图像
 	double compare( const cv::Mat &image ) {
-
 		inputH = hist.getHistogram(image);
-
-		// histogram comparison using intersection
+		// 用交叉法比较直方图
 		return cv::compareHist(refH, inputH, cv::HISTCMP_INTERSECT);
 	}
 };

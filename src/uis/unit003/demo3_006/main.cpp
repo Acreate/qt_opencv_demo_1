@@ -4,36 +4,27 @@
 #include "CvFunction.h"
 #include "Histogram.h"
 #include "ContentFinder.h"
-#include "Colorhistogram.h"
-
 
 int main( int argc, char *argv[] ) {
 	QGuiApplication a(argc, argv);
-
-	ColorHistogram hc;
-	cv::Mat color;
-	cvFunction::readImage("waves.jpg", color);
-	cv::Rect roiRect(0, 0, 100, 45);
-	cv::Mat imageRoi = color(roiRect);
-	hc.setSize(8);
-	cv::Mat shist = hc.getHistogram(imageRoi);
-	// 创建探险对象
-	ContentFinder finder;
-	// 设置直方图到探险对象当中
-	finder.setHistogram(shist);
-	finder.setThreshold(0.05f);
-	// 获取背景
-	cv::Mat result;
-	result = finder.find(color);
-	cv::Mat clone = color.clone();
-	cv::Scalar borderColor(0, 0, 255);
-	cv::rectangle(clone, roiRect, borderColor);
-	cvFunction::showMatImg(result, "查找返回");
-	cvFunction::showMatImg(clone, "显示目标");
-	cvFunction::showMatImg(imageRoi, "运算内容");
-
+	// 获取输入
+	cv::Mat image;
+	if ( !cvFunction::readImage("group.jpg", image) )
+		return 0;
+	cvFunction::writeImage("groupBW.jpg", image);
+	cvFunction::showMatImg(image, "显示常规图片");
+	// 一维直方图
+	Histogram1D h;
+	cv::Mat histo = h.getHistogram(image);
+	// 输出所有元素的占用
+	for ( int i = 0; i < 256; i++ )
+		std::cout << QString("颜色值 %1 ，个数为 %2").arg(i).arg(histo.at<float>(i)).toLocal8Bit().toStdString() << std::endl;
+	cv::Mat hi = h.getHistogramImage(image);
+	cvFunction::showMatImg(hi, "图片显示 group.jpg 直方图");
+	cv::line(hi, cv::Point(70, 0), cv::Point(70, 255), cv::Scalar(128));
+	cvFunction::showMatImg(hi, "图片显示 group.jpg 直方图");
+	
 	int exec = a.exec();
-
 
 	return exec;
 }

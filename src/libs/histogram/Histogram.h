@@ -155,45 +155,49 @@ public:
 		return result;
 	}
 
-	// Stretches the source image using percentile.
+	/// @brief 截取像素
+	/// @param image 截取参考对象
+	/// @param percentile 截取百分比，属于小于与大于之间的区间
+	/// @return 截取完毕的图像
 	cv::Mat stretch( const cv::Mat &image, float percentile ) {
-
-		// number of pixels in percentile
+		// 成员数量百分比
 		float number = image.total() * percentile;
-
-		// Compute histogram first
+		// 计算图像直方图
 		cv::Mat hist = getHistogram(image);
-
-		// find left extremity of the histogram
+		// 从左侧开始遍历直方图
 		int imin = 0;
 		for ( float count = 0.0; imin < 256; imin++ ) {
-			// number of pixel at imin and below must be > number
+			// 元素个数大于百分比，则退出，并且记录左侧位置
 			if ( (count += hist.at<float>(imin)) >= number )
 				break;
 		}
 
-		// find right extremity of the histogram
+		// 从右侧开始遍历直方图
 		int imax = 255;
 		for ( float count = 0.0; imax >= 0; imax-- ) {
-			// number of pixel at imax and below must be > number
+			// 元素个数大于百分比，则退出，并且记录右侧位置
 			if ( (count += hist.at<float>(imax)) >= number )
 				break;
 		}
 
-		// Create lookup table
+		// 创建一个记录表
 		int dims[1] = {256};
+		// 通道为 1， 通道元素为 256，每个元素为 1 字节大小
 		cv::Mat lookup(1, dims, CV_8U);
 
 		for ( int i = 0; i < 256; i++ ) {
+			// 下标小于左极限，则设置为 0
 			if ( i < imin )
 				lookup.at<uchar>(i) = 0;
+				// 下标大于右极限，则设置为 255
 			else if ( i > imax )
 				lookup.at<uchar>(i) = 255;
+				// 重新映射，并且四舍五入
 			else
 				lookup.at<uchar>(i) = cvRound(255.0 * (i - imin) / (imax - imin));
 		}
 
-		// Apply lookup table
+		// 引用表
 		cv::Mat result;
 		result = applyLookUp(image, lookup);
 
@@ -244,26 +248,39 @@ public:
 		return histImg;
 	}
 
-	// Equalizes the source image.
+	// 均衡化图像
 	static cv::Mat equalize( const cv::Mat &image ) {
-
 		cv::Mat result;
-		cv::equalizeHist(image, result);
-
+		// 只服务 1 字节整数型
+		image.convertTo(result, CV_8U);
+		// 需要进行灰度图转换
+		int type = result.type(), targetType = -1;
+		switch ( type ) {
+		case CV_8UC3 :
+			targetType = cv::COLOR_BGR2GRAY;
+			break;
+		case CV_8UC4 :
+			targetType = cv::COLOR_BGRA2GRAY;
+			break;
+		}
+		if ( targetType != -1 )
+			cv::cvtColor(result, result, targetType);
+		cv::equalizeHist(result, result);
 		return result;
 	}
 
 
-	// Applies a lookup table transforming an input image into a 1-channel image
+	/// @brief 应用映射表，把映射表映射到对应的图像上，在映射表找到的元素会覆盖对应的元素
+	/// @param image 被映射的图像
+	/// @param lookup 映射表
+	/// @return 覆盖完毕而的图像
 	static cv::Mat applyLookUp( const cv::Mat &image,
-		// input image
 		const cv::Mat &lookup ) {
-		// 1x256 uchar matrix
 
-		// the output image
+		// 输出图像
 		cv::Mat result;
 
-		// apply lookup table
+		// 应用映射
 		cv::LUT(image, lookup, result);
 
 		return result;

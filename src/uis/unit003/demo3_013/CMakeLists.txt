@@ -52,8 +52,8 @@ target_link_libraries(
 	imageComparator
 	colorHistogram
 	contentFinder
-	cvFunction
 	converQimageOrCvMat
+	cvFunction
 )
 
 # 设置包内容

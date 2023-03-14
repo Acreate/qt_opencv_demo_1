@@ -34,9 +34,9 @@ public:
 	}
 
 	// 返回统计像素最大数值
-	void setSize( int size ) {
-		// each dimension has equal size 
-		histSize[0] = histSize[1] = histSize[2] = size;
+	void setSize( int maxElemValue ) {
+		// 每个维度统计的元素上限为 size
+		histSize[0] = histSize[1] = histSize[2] = maxElemValue;
 	}
 
 	// 计算直方图
