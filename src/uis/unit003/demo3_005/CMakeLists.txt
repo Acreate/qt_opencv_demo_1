@@ -22,6 +22,11 @@ file( GLOB SRC_LIST
 	"*.h"
 	"*.ui" )
 include_directories( ../libs/converQimageOrCvMat )
+include_directories( ../libs/colorHistogram )
+include_directories( ../libs/contentFinder )
+include_directories( ../libs/histogram )
+include_directories( ../libs/imageComparator )
+include_directories( ../libs/integral )
 
 if( ${QT_VERSION_MAJOR} GREATER_EQUAL 6 )
 	# qt_add_executable( ${PROJECT_NAME} MANUAL_FINALIZATION ${SRC_LIST} )
@@ -41,6 +46,11 @@ target_link_libraries(
 	Qt${QT_VERSION_MAJOR}::Gui
 	Qt${QT_VERSION_MAJOR}::Widgets
 	${OpenCV_LIBS}
+	histogram
+	integral
+	imageComparator
+	colorHistogram
+	contentFinder
 	converQimageOrCvMat
 )
 

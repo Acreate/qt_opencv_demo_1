@@ -7,21 +7,23 @@
 class CONTENTFINDER_EXPORT ContentFinder {
 
 private:
-	// histogram parameters
+	/// @brief 直方图参数
 	float hranges[2];
+	/// @brief 范围数组
 	const float *ranges[3];
+	/// @brief 通道下标
 	int channels[3];
-
-	float threshold;// decision threshold
-	cv::Mat histogram;// histogram can be sparse 
-	cv::SparseMat shistogram;// or not
+	/// @brief 判断阈值
+	float threshold;
+	/// @brief 输入直方图
+	cv::Mat histogram;
+	/// @brief 稀疏矩阵(或者不使用，使用 isSparse 判定)
+	cv::SparseMat shistogram;
 	bool isSparse;
 
 public:
 	ContentFinder( ) : threshold(0.1f), isSparse(false) {
-
-		// in this class,
-		// all channels have the same range
+		// 指向默认的区间
 		ranges[0] = hranges;
 		ranges[1] = hranges;
 		ranges[2] = hranges;
@@ -29,26 +31,22 @@ public:
 
 	// Sets the threshold on histogram values [0,1]
 	void setThreshold( float t ) {
-
 		threshold = t;
 	}
 
 	// Gets the threshold
 	float getThreshold( ) {
-
 		return threshold;
 	}
 
-	// Sets the reference histogram
+	// 设置直方图，并且归一化
 	void setHistogram( const cv::Mat &h ) {
-
 		isSparse = false;
 		cv::normalize(h, histogram, 1.0);
 	}
 
-	// Sets the reference histogram
+	// 设置稀疏直方图，并且归一化
 	void setHistogram( const cv::SparseMat &h ) {
-
 		isSparse = true;
 		cv::normalize(h, shistogram, 1.0, cv::NORM_L2);
 	}
@@ -58,7 +56,6 @@ public:
 	cv::Mat find( const cv::Mat &image ) {
 
 		cv::Mat result;
-
 		hranges[0] = 0.0;// default range [0,256[
 		hranges[1] = 256.0;
 		channels[0] = 0;// the three channels 
@@ -76,10 +73,10 @@ public:
 		hranges[0] = minValue;
 		hranges[1] = maxValue;
 
-		if( isSparse ) {
+		if ( isSparse ) {
 			// call the right function based on histogram type
 
-			for( int i = 0; i < shistogram.dims(); i++ )
+			for ( int i = 0; i < shistogram.dims(); i++ )
 				this->channels[i] = channels[i];
 
 			cv::calcBackProject(&image,
@@ -93,7 +90,7 @@ public:
 
 		} else {
 
-			for( int i = 0; i < histogram.dims; i++ )
+			for ( int i = 0; i < histogram.dims; i++ )
 				this->channels[i] = channels[i];
 
 			cv::calcBackProject(&image,
@@ -107,7 +104,7 @@ public:
 		}
 
 		// Threshold back projection to obtain a binary image
-		if( threshold > 0.0 )
+		if ( threshold > 0.0 )
 			cv::threshold(result, result, 255.0 * threshold, 255.0, cv::THRESH_BINARY);
 
 		return result;

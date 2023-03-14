@@ -20,7 +20,6 @@ int main( int argc, char *argv[] ) {
 	imageROI = image(cv::Rect(216, 33, 24, 30));
 	// 显示感兴趣区域
 	cvFunction::showMatImg(imageROI, "Reference");
-
 	// 1 维直方图
 	Histogram1D h;
 	cv::Mat hist = h.getHistogram(imageROI);
