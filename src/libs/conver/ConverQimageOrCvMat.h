@@ -2,11 +2,11 @@
 #define CONVERQIMAGEORCVMAT_H_H_HEAD__FILE__
 #pragma once
 
-#include "ConverQimageOrCvMat_export.h"
+#include "Conver_export.h"
 #include <opencv2/opencv.hpp>
 #include <QImage>
 
-class CONVERQIMAGEORCVMAT_EXPORT ConverQimageOrCvMat {
+class CONVER_EXPORT ConverQimageOrCvMat {
 public:
 	/// @brief 实现从 qt 图像转换到 opencv 图像
 	/// @param qtImage qt 图像对象

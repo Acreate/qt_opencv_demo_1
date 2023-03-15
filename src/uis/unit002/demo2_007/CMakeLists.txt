@@ -21,7 +21,7 @@ file(  GLOB  SRC_LIST
   "*.hpp"
   "*.h"
   "*.ui")
-include_directories(../libs/converQimageOrCvMat)
+include_directories(../libs/conver)
 include_directories(../libs/cvFunction)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -43,7 +43,7 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Widgets 
 	${OpenCV_LIBS}
 	cvFunction
-	converQimageOrCvMat)
+	conver)
 # 设置包内容
 set_target_properties(
   ${PROJECT_NAME}

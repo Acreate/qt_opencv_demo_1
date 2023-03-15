@@ -9,7 +9,6 @@ message( "============ ${CURRENT_FOLDER}" )
 
 find_package( Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets )
 
-set( OpenCV_DIR "C:/libs/opencv/build/" )
 
 find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} )
@@ -21,7 +20,7 @@ file( GLOB SRC_LIST
 	"*.hpp"
 	"*.h"
 	"*.ui" )
-include_directories( ../libs/converQimageOrCvMat )
+include_directories( ../libs/conver )
 include_directories( ../libs/cvFunction )
 
 if( ${QT_VERSION_MAJOR} GREATER_EQUAL 6 )
@@ -42,7 +41,7 @@ target_link_libraries(
 	Qt${QT_VERSION_MAJOR}::Gui
 	Qt${QT_VERSION_MAJOR}::Widgets
 	${OpenCV_LIBS}
-	converQimageOrCvMat
+	conver
 	cvFunction
 )
 

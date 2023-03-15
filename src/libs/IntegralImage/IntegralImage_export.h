@@ -1,0 +1,42 @@
+
+#ifndef INTEGRALIMAGE_EXPORT_H
+#define INTEGRALIMAGE_EXPORT_H
+
+#ifdef INTEGRALIMAGE_STATIC_DEFINE
+#  define INTEGRALIMAGE_EXPORT
+#  define INTEGRALIMAGE_NO_EXPORT
+#else
+#  ifndef INTEGRALIMAGE_EXPORT
+#    ifdef IntegralImage_EXPORTS
+        /* We are building this library */
+#      define INTEGRALIMAGE_EXPORT __declspec(dllexport)
+#    else
+        /* We are using this library */
+#      define INTEGRALIMAGE_EXPORT __declspec(dllimport)
+#    endif
+#  endif
+
+#  ifndef INTEGRALIMAGE_NO_EXPORT
+#    define INTEGRALIMAGE_NO_EXPORT 
+#  endif
+#endif
+
+#ifndef INTEGRALIMAGE_DEPRECATED
+#  define INTEGRALIMAGE_DEPRECATED __declspec(deprecated)
+#endif
+
+#ifndef INTEGRALIMAGE_DEPRECATED_EXPORT
+#  define INTEGRALIMAGE_DEPRECATED_EXPORT INTEGRALIMAGE_EXPORT INTEGRALIMAGE_DEPRECATED
+#endif
+
+#ifndef INTEGRALIMAGE_DEPRECATED_NO_EXPORT
+#  define INTEGRALIMAGE_DEPRECATED_NO_EXPORT INTEGRALIMAGE_NO_EXPORT INTEGRALIMAGE_DEPRECATED
+#endif
+
+#if 0 /* DEFINE_NO_DEPRECATED */
+#  ifndef INTEGRALIMAGE_NO_DEPRECATED
+#    define INTEGRALIMAGE_NO_DEPRECATED
+#  endif
+#endif
+
+#endif /* INTEGRALIMAGE_EXPORT_H */

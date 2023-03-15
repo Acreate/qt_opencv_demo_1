@@ -27,7 +27,7 @@ public:
 		nBins = bins;
 	}
 
-	int getNumberOfBins( ) {
+	int getNumberOfBins( ) const {
 		return nBins;
 	}
 

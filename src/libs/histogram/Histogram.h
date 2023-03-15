@@ -101,6 +101,8 @@ public:
 
 
 	/// @brief 计算图像一维直方图，并且生成一个可视化的图像
+	/// @param image 计算图像
+	/// @param zoom 显示倍数
 	/// @return 可显示的图像
 	cv::Mat getHistogramImage( const cv::Mat &image, int zoom = 1 ) {
 
