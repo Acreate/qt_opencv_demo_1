@@ -11,7 +11,7 @@
 #include "Integral_export.h"
 
 template< typename T, int N >
-class INTEGRAL_EXPORT IntegralImage {
+class IntegralImage {
 
 	cv::Mat integralImage;
 
