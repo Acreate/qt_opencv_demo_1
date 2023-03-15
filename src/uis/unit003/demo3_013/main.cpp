@@ -9,30 +9,35 @@
 
 int main( int argc, char *argv[] ) {
 	QGuiApplication a(argc, argv);
-	ColorHistogram hc;
-	cv::Mat color, imageRoi, shist, color2, result1, result2;
+	
+	cv::Mat image, imageROI, result1, result2, color, color2, tmp, lab, hsv, colorhist, shist;
+	Histogram1D h;
 	ContentFinder finder;
+	ColorHistogram hc;
+	cv::Rect roi1 = cv::Rect(216, 33, 24, 30);
+	cv::Rect roi2 = cv::Rect(0, 0, 100, 45);
+	int ch[2] = {1, 2};
+
+	
 	cvFunction::readImage("waves.jpg", color);
-	cvFunction::showMatImg(color, "waves.jpg 图像");
-	cv::Rect roiRect(0, 0, 100, 45);
-	imageRoi = color(roiRect);
-	cvFunction::showMatImg(imageRoi, "截取区域图像");
-	finder.setThreshold(0.05f);
-	int ch[2] = {0, 2};
-	// 使用 色调 去匹配
-	// 最大 180 像素值
-	hc.setSize(180);
-	shist = hc.getHueHistogram(imageRoi);
-	finder.setHistogram(shist);
-	cv::Mat hsv;
-	cv::cvtColor(color, hsv, cv::COLOR_BGR2HSV);
-	result1 = finder.find(hsv, 0.0f, 180.0f, ch);
-	cvFunction::showMatImg(result1, "被截取区域在 waves.jpg(HSV 格式) 图像位置描述(0 通道)");
 	cvFunction::readImage("dog.jpg", color2);
+	
+	imageROI = color(roi2);
+	hc.setSize(180);
+	colorhist = hc.getHueHistogram(imageROI);
+	finder.setHistogram(colorhist);
+	finder.setThreshold(0.05f);
+	cv::cvtColor(color, hsv, cv::COLOR_BGR2HSV);
+	ch[0] = 0;
+	result1 = finder.find(hsv, 0.0f, 180.0f, ch);
+	cvFunction::showMatImg(result1, "使用 hsv 检测 waves.jpg");
+	
 	cv::cvtColor(color2, hsv, cv::COLOR_BGR2HSV);
 	result2 = finder.find(hsv, 0.0f, 180.0f, ch);
-	cvFunction::showMatImg(result2, "被截取区域在 dog.jpg(HSV 格式) 图像位置描述(0 通道)");
-
+	cvFunction::showMatImg(result2, "使用 hsv 检测 dog.jpg");
+	
+	cvFunction::showMatImg(color, "waves.jpg");
+	cvFunction::showMatImg(color2, "dog.jpg");
 	int exec = a.exec();
 	return exec;
 }

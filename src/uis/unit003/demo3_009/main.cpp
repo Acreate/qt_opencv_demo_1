@@ -26,8 +26,8 @@ int main( int argc, char *argv[] ) {
 	for (int i=0; i<256; i++) 
 		lut.at<uchar>(i)= 255-i;
 	cvFunction::showMatImg(h.applyLookUp(image,lut), "被映射的 group.jpg 图像");
-	
-	int exec = a.exec();
+
+	const int exec = a.exec();
 
 	return exec;
 }

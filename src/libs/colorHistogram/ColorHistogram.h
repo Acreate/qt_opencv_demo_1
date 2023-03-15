@@ -107,7 +107,7 @@ public:
 	/// @param minSaturation 最小忽略数
 	/// @return 统计的值
 	cv::Mat getHueHistogram( const cv::Mat &image,
-		int minSaturation = 0 ) {
+		const int minSaturation = 0 ) {
 
 		cv::Mat hist;
 
