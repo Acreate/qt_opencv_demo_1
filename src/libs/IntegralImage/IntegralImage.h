@@ -65,8 +65,11 @@ inline INTEGRALIMAGE_EXPORT void convertToBinaryPlanes( const cv::Mat &input, cv
 
 	// 计算每个二值图像平面
 	for ( int i = 0; i < nPlanes; i++ ) {
+		int i1 = i << n;
+		cv::MatExpr matExpr = reduced == i1;
+		cv::MatExpr val = matExpr & 0x1;
 		// 将每个等于 i << shift 的像素设置为 1
-		planes.push_back((reduced == (i << n)) & 0x1);
+		planes.push_back(val);
 	}
 
 	// 创建多通道图像

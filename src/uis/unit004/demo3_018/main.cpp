@@ -26,20 +26,6 @@ int main( int argc, char *argv[] ) {
 	// 截取
 	cv::Mat roi(image, roiRect);
 
-	// 计算元素和
-	cv::Scalar sum = cv::sum(roi);
-	std::cout << sum[0] << std::endl;
-
-	// 计算积分
-	cv::Mat integralImage;
-	cv::integral(image, integralImage,CV_32S);
-	// 用三次加减法求一个区域的和
-	int sumInt = integralImage.at<int>(yo + height, xo + width)
-		- integralImage.at<int>(yo + height, xo)
-		- integralImage.at<int>(yo, xo + width)
-		+ integralImage.at<int>(yo, xo);
-	std::cout << sumInt << std::endl;
-
 	// 16 元素的直方图
 	Histogram1D h;
 	h.setNBins(16);
@@ -47,7 +33,6 @@ int main( int argc, char *argv[] ) {
 	cv::Mat refHistogram = h.getHistogram(roi);
 	cvFunction::showMatImg(h.getHistogramImage(roi, 16), "截取区域的直方图显示");
 	std::cout << refHistogram << std::endl;
-
 
 	// 创建一个16层显示面板
 	cv::Mat planes;
